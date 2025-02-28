@@ -7,6 +7,7 @@ import { Sidebar } from "@/components/sidebar";
 import { SearchCommand } from "@/components/search-command";
 import { AuthProvider } from "@/components/auth-provider";
 import { UserButton } from "@/components/user-button";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -44,6 +45,7 @@ export default function RootLayout({
                 <div className="container mx-auto px-4 py-8">{children}</div>
               </main>
             </div>
+            <Analytics />
           </ThemeProvider>
         </AuthProvider>
       </body>
