@@ -27,6 +27,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Insert the ad script here */}
+        <script
+          type="text/javascript"
+          src="//pl26001964.effectiveratecpm.com/63/57/da/6357dac271db1d3845ad0ece62e22bbb.js"
+        ></script>
+      </head>
       <body
         className={`${inter.className} bg-gradient-to-br from-gray-900 to-black text-white`}
       >
