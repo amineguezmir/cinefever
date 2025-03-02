@@ -78,7 +78,7 @@ export function SearchCommand() {
           )}
         </div>
         <Input
-          placeholder="Search your favorite movies..."
+          placeholder="Search your favorite Movies or Tv Shows..."
           className="w-full pl-9 pr-12 bg-background/80 backdrop-blur-sm border-primary/20 focus-visible:ring-primary/30 focus-visible:border-primary/50 transition-all duration-200 h-11 rounded-xl"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}

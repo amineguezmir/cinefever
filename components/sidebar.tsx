@@ -19,6 +19,7 @@ import {
   Mail,
   HelpCircle,
   Facebook,
+  Tv,
 } from "lucide-react";
 import { SupportDialog } from "./support-dialog";
 import { useSession } from "next-auth/react";
@@ -41,6 +42,12 @@ const routes = [
     icon: Film,
     href: "/movies",
     color: "from-blue-500 to-cyan-500",
+  },
+  {
+    label: "TV Shows",
+    icon: Tv,
+    href: "/tv",
+    color: "from-purple-500 to-cyan-500",
   },
   {
     label: "Library",

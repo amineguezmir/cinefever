@@ -1,205 +1,281 @@
 "use client";
 
-import type React from "react";
 import { useState, useEffect } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { Star, Play, Bookmark, MoonStar, Clock } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Search, Loader2, Film, X } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
-export interface TvShow {
-  name: string;
-  episodes: any[];
-  posterPath?: string;
-  rating?: number;
-  year?: number;
-  status?: string;
-  director?: string;
-  cast?: string[];
-  description?: string;
-  genres?: string[];
-}
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.3,
+    },
+  },
+  exit: {
+    opacity: 0,
+    transition: {
+      staggerChildren: 0.05,
+      staggerDirection: -1,
+    },
+  },
+};
 
-interface TvShowCardProps {
-  show: TvShow;
-  className?: string;
-  isRamadanSpecial?: boolean;
-}
-
-export function TvShowCard({
-  show,
-  className,
-  isRamadanSpecial = true,
-}: TvShowCardProps) {
-  const [isBookmarked, setIsBookmarked] = useState(false);
+export function SearchCommand() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [movies, setMovies] = useState<any[]>([]);
+  const [tvShows, setTvShows] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log("Rendering TvShowCard for:", show.name);
-    const bookmarkedShows = JSON.parse(
-      localStorage.getItem("bookmarkedShows") || "[]"
-    );
-    setIsBookmarked(bookmarkedShows.some((s: TvShow) => s.name === show.name));
-  }, [show.name]);
-
-  const handleBookmark = (e: React.MouseEvent) => {
-    e.preventDefault();
-
-    const bookmarkedShows = JSON.parse(
-      localStorage.getItem("bookmarkedShows") || "[]"
-    );
-
-    if (isBookmarked) {
-      const updatedBookmarks = bookmarkedShows.filter(
-        (s: TvShow) => s.name !== show.name
-      );
-      localStorage.setItem("bookmarkedShows", JSON.stringify(updatedBookmarks));
-    } else {
-      localStorage.setItem(
-        "bookmarkedShows",
-        JSON.stringify([...bookmarkedShows, show])
-      );
+    if (searchQuery.trim() === "") {
+      setMovies([]);
+      setTvShows([]);
+      return;
     }
 
-    setIsBookmarked(!isBookmarked);
+    const fetchMoviesAndTvShows = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const movieResponse = await fetch(
+          `/api/movies/search?query=${searchQuery}`
+        );
+        const tvShowResponse = await fetch(
+          `/api/tv/search?query=${searchQuery}`
+        );
+
+        if (!movieResponse.ok || !tvShowResponse.ok) {
+          throw new Error("HTTP error while fetching movies or TV shows.");
+        }
+
+        const movieData = await movieResponse.json();
+        const tvShowData = await tvShowResponse.json();
+
+        setMovies(movieData);
+        setTvShows(tvShowData);
+      } catch (error: any) {
+        console.error("Failed to search movies or TV shows:", error);
+        setError("Failed to search. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const debounce = setTimeout(() => {
+      fetchMoviesAndTvShows();
+    }, 500);
+
+    return () => clearTimeout(debounce);
+  }, [searchQuery]);
+
+  const clearSearch = () => {
+    setSearchQuery("");
+    setMovies([]);
+    setTvShows([]);
   };
 
   return (
-    <motion.div
-      whileHover={{ scale: 1.05 }}
-      transition={{ duration: 0.2 }}
-      className={cn(className, "relative")}
-    >
-      {isRamadanSpecial && (
-        <>
-          <div className="absolute -top-3 -right-3 z-10">
-            <div className="relative">
-              <div className="absolute inset-0 bg-amber-500 rounded-full blur-md opacity-30 animate-pulse"></div>
-              <Badge
-                variant="outline"
-                className="relative bg-gradient-to-r from-amber-600 to-amber-400 text-white border-0 px-3 py-1 rounded-full shadow-lg"
-              >
-                <MoonStar className="h-3.5 w-3.5 mr-1" />
-                Ramadan Special
-              </Badge>
-            </div>
-          </div>
-          <div className="absolute -z-10 inset-0 bg-gradient-to-t from-amber-500/20 to-indigo-500/10 rounded-lg blur-xl opacity-30"></div>
-        </>
-      )}
+    <div className="relative w-full max-w-[600px] mx-auto p-4">
+      <div className="relative group">
+        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+          {loading ? (
+            <Loader2 className="h-4 w-4 animate-spin text-primary" />
+          ) : (
+            <Search className="h-4 w-4" />
+          )}
+        </div>
+        <Input
+          placeholder="Search your favorite Movies or TV Shows..."
+          className="w-full pl-9 pr-12 bg-background/80 backdrop-blur-sm border-primary/20 focus-visible:ring-primary/30 focus-visible:border-primary/50 transition-all duration-200 h-11 rounded-xl"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+          {searchQuery && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-6 w-6 rounded-full p-0 text-muted-foreground hover:text-foreground"
+              onClick={clearSearch}
+            >
+              <X className="h-3 w-3" />
+              <span className="sr-only">Clear search</span>
+            </Button>
+          )}
+          <kbd className="hidden md:inline-flex items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-70">
+            <span className="text-xs">⌘</span>K
+          </kbd>
+        </div>
+      </div>
 
-      <Link
-        href={`/tvshows/${show.name}`}
-        className={cn(
-          "group relative flex flex-col overflow-hidden rounded-lg shadow-lg",
-          isRamadanSpecial
-            ? "bg-gradient-to-br from-indigo-900/80 to-black/90 ring-1 ring-amber-500/30"
-            : "bg-black/40"
+      <AnimatePresence mode="wait">
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+            className="mt-4 p-4 bg-destructive/90 backdrop-blur-sm text-destructive-foreground rounded-lg shadow-lg border border-destructive/20"
+          >
+            <p className="text-sm font-medium">{error}</p>
+          </motion.div>
         )}
-      >
-        <div className="relative aspect-[2/3] w-full overflow-hidden">
-          <Image
-            src={show.posterPath || "/placeholder.svg"}
-            alt={show.name}
-            fill
-            className={cn(
-              "object-cover transition-all duration-300 group-hover:scale-110",
-              isRamadanSpecial
-                ? "group-hover:brightness-75 group-hover:saturate-150"
-                : "group-hover:brightness-50"
-            )}
-          />
 
-          {isRamadanSpecial && (
-            <div className="absolute inset-0 bg-gradient-to-t from-amber-900/40 to-transparent opacity-60"></div>
+        {searchQuery &&
+          !loading &&
+          (movies.length > 0 || tvShows.length > 0) && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="absolute left-0 w-full mt-2 bg-background/95 backdrop-blur-md p-4 rounded-xl shadow-xl border border-primary/10 max-h-[70vh] overflow-y-auto z-50"
+            >
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                className="flex items-center justify-between mb-3 px-1"
+              >
+                <div className="flex items-center gap-2">
+                  <Film className="h-4 w-4 text-primary" />
+                  <h3 className="text-sm font-medium">Search Results</h3>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {movies.length + tvShows.length} results found
+                </p>
+              </motion.div>
+
+              <motion.div
+                variants={container}
+                initial="hidden"
+                animate="show"
+                exit="exit"
+                className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+              >
+                {movies.map((movie: any) => (
+                  <motion.div
+                    key={movie.id}
+                    variants={{
+                      hidden: { opacity: 0, y: 20 },
+                      show: {
+                        opacity: 1,
+                        y: 0,
+                        transition: {
+                          duration: 0.5,
+                          ease: "easeOut",
+                        },
+                      },
+                      exit: {
+                        opacity: 0,
+                        y: 20,
+                        transition: {
+                          duration: 0.3,
+                        },
+                      },
+                    }}
+                  >
+                    <div className="w-full max-w-xs mx-auto">
+                      <img
+                        src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                        alt={movie.title}
+                        className="w-full h-64 object-cover rounded-lg"
+                      />
+                      <h3 className="text-sm font-semibold mt-2">
+                        {movie.title}
+                      </h3>
+                    </div>
+                  </motion.div>
+                ))}
+
+                {tvShows.map((show: any) => (
+                  <motion.div
+                    key={show.id}
+                    variants={{
+                      hidden: { opacity: 0, y: 20 },
+                      show: {
+                        opacity: 1,
+                        y: 0,
+                        transition: {
+                          duration: 0.5,
+                          ease: "easeOut",
+                        },
+                      },
+                      exit: {
+                        opacity: 0,
+                        y: 20,
+                        transition: {
+                          duration: 0.3,
+                        },
+                      },
+                    }}
+                  >
+                    <div className="w-full max-w-xs mx-auto">
+                      <img
+                        src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
+                        alt={show.name}
+                        className="w-full h-64 object-cover rounded-lg"
+                      />
+                      <h3 className="text-sm font-semibold mt-2">
+                        {show.name}
+                      </h3>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </motion.div>
           )}
 
-          <div className="absolute inset-0 flex flex-col justify-between p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-            <div className="flex justify-between">
-              <Badge
-                variant={isRamadanSpecial ? "default" : "secondary"}
-                className={cn(
-                  "w-fit",
-                  isRamadanSpecial &&
-                    "bg-gradient-to-r from-amber-600 to-amber-400 border-0"
-                )}
-              >
-                {isRamadanSpecial ? "Ramadan 2025" : "TV Series"}
-              </Badge>
-              <Button
-                size="icon"
-                variant="ghost"
-                className="h-8 w-8 rounded-full bg-black/50 hover:bg-black/70"
-                onClick={handleBookmark}
-              >
-                <Bookmark
-                  className={cn(
-                    "h-4 w-4",
-                    isBookmarked
-                      ? "fill-amber-400 text-amber-400"
-                      : "text-white"
-                  )}
-                />
-              </Button>
+        {loading && searchQuery && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ duration: 0.3 }}
+            className="absolute left-0 w-full mt-2 bg-background/95 backdrop-blur-md p-6 rounded-xl shadow-xl border border-primary/10"
+          >
+            <div className="flex flex-col items-center justify-center gap-2">
+              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+              <p className="text-sm text-muted-foreground">
+                Searching for movies and TV shows...
+              </p>
             </div>
-            <div className="space-y-2">
-              <h3
-                className={cn(
-                  "text-lg font-bold text-white line-clamp-1",
-                  isRamadanSpecial && "text-amber-200"
-                )}
-              >
-                {show.name}
-              </h3>
-              {show.year && show.rating && (
-                <div className="flex items-center gap-2 text-sm text-white/70">
-                  <span>{show.year}</span>
-                  <span>•</span>
-                  <div className="flex items-center">
-                    <Star
-                      className={cn(
-                        "mr-1 h-3.5 w-3.5",
-                        isRamadanSpecial
-                          ? "fill-amber-400 text-amber-400"
-                          : "fill-yellow-400 text-yellow-400"
-                      )}
-                    />
-                    {show.rating.toFixed(1)}
-                  </div>
-                </div>
-              )}
-              {show.description && (
-                <p className="line-clamp-2 text-sm text-white/70">
-                  {show.description}
-                </p>
-              )}
-
-              {isRamadanSpecial ? (
-                <div className="flex gap-2">
-                  <Button
-                    className="flex-1 gap-2 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-700 hover:to-amber-600 border-0"
-                    size="sm"
-                  >
-                    <Play className="h-4 w-4" />
-                    Watch
-                  </Button>
-                </div>
-              ) : (
-                <Button className="w-full gap-2" size="sm">
-                  <Play className="h-4 w-4" />
-                  Watch Now
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {isRamadanSpecial && (
-          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent"></div>
+          </motion.div>
         )}
-      </Link>
-    </motion.div>
+
+        {searchQuery &&
+          !loading &&
+          movies.length === 0 &&
+          tvShows.length === 0 &&
+          !error && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.3 }}
+              className="absolute left-0 w-full mt-2 bg-background/95 backdrop-blur-md p-6 rounded-xl shadow-xl border border-primary/10"
+            >
+              <div className="flex flex-col items-center justify-center gap-2">
+                <p className="text-center text-muted-foreground">
+                  No results found for "{searchQuery}"
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={clearSearch}
+                  className="mt-2"
+                >
+                  Clear search
+                </Button>
+              </div>
+            </motion.div>
+          )}
+      </AnimatePresence>
+    </div>
   );
 }
