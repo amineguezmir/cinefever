@@ -33,10 +33,6 @@ export default function RootLayout({
           type="text/javascript"
           src="https://pl26001964.effectiveratecpm.com/63/57/da/6357dac271db1d3845ad0ece62e22bbb.js"
         ></script>
-        <meta
-          name="6a97888e-site-verification"
-          content="e4783cfd3db6c94d3fd0e529c653d894"
-        />
       </head>
       <body
         className={`${inter.className} bg-gradient-to-br from-gray-900 to-black text-white`}
