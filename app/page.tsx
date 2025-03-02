@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import { Star, Calendar, Clock } from "lucide-react";
-import TvShows from "./tvshows/page";
 
 async function getMovies(endpoint: string) {
   const accessToken = process.env.TMDB_ACCESS_TOKEN;
@@ -146,7 +145,7 @@ export default async function Home() {
         <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white" />
         <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white" />
       </Carousel>
-      <TvShows />
+
       <MovieSection
         title="Trending Now"
         movies={trendingMovies}
