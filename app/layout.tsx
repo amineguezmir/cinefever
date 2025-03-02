@@ -18,6 +18,10 @@ export const metadata: Metadata = {
   icons: {
     icon: "/movie.png",
   },
+  other: {
+    c8cc89098866ac6dd7d6d7f874fe1f3411a6f9a0:
+      "c8cc89098866ac6dd7d6d7f874fe1f3411a6f9a0",
+  },
 };
 
 export default function RootLayout({
@@ -55,5 +59,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-import "./globals.css";
