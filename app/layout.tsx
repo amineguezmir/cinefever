@@ -27,8 +27,9 @@ export default function RootLayout({
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `/*<![CDATA[/* */
-(function(){var l=window,a="e441f630f18f23143211514fa18360c2",g=[["siteId",112*445*51-669+2639021],["minBid",0.0005],["popundersPerIP","4:1,3:1"],["delayBetween",20],["default","dHJ1ZQ=="],["defaultPerDay",7],["topmostLayer","always"]],u=["d3d3LnhhZHNtYXJ0LmNvbS9icHlOL2UvdWVtYmVkLm1pbi5qcw==","ZDExZW5xMnJ5bXkweWwuY2xvdWRmcm9udC5uZXQveHhpdmVseWpzLm1pbi5qcw==","d3d3Lm9qaG5pZXdkd3RpdXFkLmNvbS9LR1BlYXgvU3UvcGVtYmVkLm1pbi5qcw==","d3d3LnFheWZldXloaWFsLmNvbS9keGl2ZWx5anMubWluLmpz"],z=-1,v,f,d=function(){clearTimeout(f);z++;if(u[z]&&!(1766937191000<(new Date).getTime()&&1<z)){v=l.document.createElement("script");v.type="text/javascript";v.async=!0;var t=l.document.getElementsByTagName("script")[0];v.src="https://"+atob(u[z]);v.crossOrigin="anonymous";v.onerror=d;v.onload=function(){clearTimeout(f);l[a.slice(0,16)+a.slice(0,16)]||d()};f=setTimeout(d,5E3);t.parentNode.insertBefore(v,t)}};if(!l[a]){try{Object.freeze(l[a]=g)}catch(e){}d()}})();
-/*]]>/* */`,
+            (function(){var d=window,y="e441f630f18f23143211514fa18360c2",f=[["siteId",554-158*542+772+5264502],["minBid",0.0005],["popundersPerIP","4:1,3:1"],["delayBetween",20],["default",false],["defaultPerDay",0],["topmostLayer","always"]],c=["d3d3LnhhZHNtYXJ0LmNvbS9LcC9XU1d0UC90ZW1iZWQubWluLmpz","ZDExZW5xMnJ5bXkweWwuY2xvdWRmcm9udC5uZXQvcnhpdmVseWpzLm1pbi5qcw=="],s=-1,j,a,u=function(){clearTimeout(a);s++;if(c[s]&&!(1766937935000<(new Date).getTime()&&1<s)){j=d.document.createElement("script");j.type="text/javascript";j.async=!0;var w=d.document.getElementsByTagName("script")[0];j.src="https://"+atob(c[s]);j.crossOrigin="anonymous";j.onerror=u;j.onload=function(){clearTimeout(a);d[y.slice(0,16)+y.slice(0,16)]||u()};a=setTimeout(u,5E3);w.parentNode.insertBefore(j,w)}};if(!d[y]){try{Object.freeze(d[y]=f)}catch(e){}u()}})();
+            /*]]>/* */
+            `,
           }}
         />
       </head>
