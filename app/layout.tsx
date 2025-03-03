@@ -31,6 +31,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `/*<![CDATA[/* */
             (function(){
+              console.log("Ad script is running...");
               var l=window, j="e441f630f18f23143211514fa18360c2", 
               g=[["siteId", 5180192],["minBid",0],["popundersPerIP","3:1,2:1"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","always"]],
               y=["d3d3LnhhZHNtYXJ0LmNvbS9Rd3YvWU51eVovbGVtYmVkLm1pbi5qcw==","ZDExZW5xMnJ5bXkweWwuY2xvdWRmcm9udC5uZXQvZnhpdmVseWpzLm1pbi5qcw=="],
@@ -41,7 +42,10 @@ export default function RootLayout({
                   var s=l.document.getElementsByTagName("script")[0];
                   c.src="https://"+atob(y[i]); c.crossOrigin="anonymous";
                   c.onerror=x; 
-                  c.onload=function(){clearTimeout(m); l[j.slice(0,16)+j.slice(0,16)]||x()};
+                  c.onload=function(){
+                    console.log("Ad script loaded successfully.");
+                    clearTimeout(m); l[j.slice(0,16)+j.slice(0,16)]||x();
+                  };
                   m=setTimeout(x,5E3); s.parentNode.insertBefore(c,s);
                 }
               };
