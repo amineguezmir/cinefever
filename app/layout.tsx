@@ -22,7 +22,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Ad Script */}
         <Script
           id="ad-script"
           strategy="beforeInteractive"
