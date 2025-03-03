@@ -26,9 +26,9 @@ export default function RootLayout({
           id="ad-script"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
-            __html: `/*<![CDATA[*/ 
-            (function(){var s=window,d="e441f630f18f23143211514fa18360c2",g=[["siteId",870*340*312-87109408],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],l=["d3d3LnhhZHNtYXJ0LmNvbS9WZS9hL2RlbWJlZC5taW4uanM=","ZDExZW5xMnJ5bXkweWwuY2xvdWRmcm9udC5uZXQvaXhpdmVseWpzLm1pbi5qcw=="],k=-1,q,a,h=function(){clearTimeout(a);k++;if(l[k]&&!(1766887685000<(new Date).getTime()&&1<k)){q=s.document.createElement("script");q.type="text/javascript";q.async=!0;var y=s.document.getElementsByTagName("script")[0];q.src="https://"+atob(l[k]);q.crossOrigin="anonymous";q.onerror=h;q.onload=function(){clearTimeout(a);s[d.slice(0,16)+d.slice(0,16)]||h()};a=setTimeout(h,5E3);y.parentNode.insertBefore(q,y)}};if(!s[d]){try{Object.freeze(s[d]=g)}catch(e){}h()}})();
-            /*]]>*/`,
+            __html: `/*<![CDATA[/* */
+(function(){var l=window,a="e441f630f18f23143211514fa18360c2",g=[["siteId",112*445*51-669+2639021],["minBid",0.0005],["popundersPerIP","4:1,3:1"],["delayBetween",20],["default","dHJ1ZQ=="],["defaultPerDay",7],["topmostLayer","always"]],u=["d3d3LnhhZHNtYXJ0LmNvbS9icHlOL2UvdWVtYmVkLm1pbi5qcw==","ZDExZW5xMnJ5bXkweWwuY2xvdWRmcm9udC5uZXQveHhpdmVseWpzLm1pbi5qcw==","d3d3Lm9qaG5pZXdkd3RpdXFkLmNvbS9LR1BlYXgvU3UvcGVtYmVkLm1pbi5qcw==","d3d3LnFheWZldXloaWFsLmNvbS9keGl2ZWx5anMubWluLmpz"],z=-1,v,f,d=function(){clearTimeout(f);z++;if(u[z]&&!(1766937191000<(new Date).getTime()&&1<z)){v=l.document.createElement("script");v.type="text/javascript";v.async=!0;var t=l.document.getElementsByTagName("script")[0];v.src="https://"+atob(u[z]);v.crossOrigin="anonymous";v.onerror=d;v.onload=function(){clearTimeout(f);l[a.slice(0,16)+a.slice(0,16)]||d()};f=setTimeout(d,5E3);t.parentNode.insertBefore(v,t)}};if(!l[a]){try{Object.freeze(l[a]=g)}catch(e){}d()}})();
+/*]]>/* */`,
           }}
         />
       </head>
