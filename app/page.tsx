@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import { Star, Calendar, Clock } from "lucide-react";
+import TvShows from "./tv/page";
 
 async function getMovies(endpoint: string) {
   const accessToken = process.env.TMDB_ACCESS_TOKEN;
