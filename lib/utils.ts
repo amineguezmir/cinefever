@@ -228,3 +228,54 @@ export async function getTVShowSearchResults(query: string) {
     throw new Error("Failed to search TV shows");
   }
 }
+
+export async function getAnimes() {
+  const url =
+    "https://api.themoviedb.org/3/discover/tv?with_genres=16&sort_by=popularity.desc";
+
+  try {
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${process.env.TMDB_ACCESS_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("TMDB API Error:", data);
+      throw new Error(`Failed to fetch anime: ${data.status_message}`);
+    }
+
+    return data.results || [];
+  } catch (error) {
+    console.error("Fetch error:", error);
+    throw new Error("Failed to fetch anime");
+  }
+}
+
+export async function getAnimeDetails(animeId: string) {
+  const url = `https://api.themoviedb.org/3/tv/${animeId}`;
+
+  try {
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${process.env.TMDB_ACCESS_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("TMDB API Error:", data);
+      throw new Error(`Failed to fetch anime details: ${data.status_message}`);
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Fetch error:", error);
+    throw new Error("Failed to fetch anime details");
+  }
+}

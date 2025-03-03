@@ -20,6 +20,8 @@ import {
   HelpCircle,
   Facebook,
   Tv,
+  HeadphonesIcon,
+  Tv2Icon,
 } from "lucide-react";
 import { SupportDialog } from "./support-dialog";
 import { useSession } from "next-auth/react";
@@ -48,6 +50,12 @@ const routes = [
     icon: Tv,
     href: "/tv",
     color: "from-purple-500 to-cyan-500",
+  },
+  {
+    label: "Anime",
+    icon: Tv2Icon,
+    href: "/anime",
+    color: "from-pink-500 to-pink-300",
   },
   {
     label: "Library",
@@ -121,7 +129,8 @@ export function Sidebar() {
           isMobile && !isOpen ? "w-0" : "",
           isMobile && isOpen ? "w-[220px]" : "",
           !isMobile && isOpen ? "w-[240px]" : "",
-          !isMobile && !isOpen ? "w-[80px]" : ""
+          !isMobile && !isOpen ? "w-[80px]" : "",
+          "z-10"
         )}
       >
         <div className="flex items-center justify-between p-4">

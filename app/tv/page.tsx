@@ -265,8 +265,8 @@ export default function TVShowsPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
-      <div className="bg-gradient-to-r from-purple-100 via-purple-50 to-background rounded-xl p-6 mb-8">
+    <div className="dark min-h-screen bg-background text-foreground">
+      <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-background rounded-xl p-6 mb-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center">
             <Tv className="h-8 w-8 mr-3 text-primary" />
@@ -298,7 +298,7 @@ export default function TVShowsPage() {
             </div>
             <Button
               type="submit"
-              className="py-6 bg-purple-500 hover:bg-purple-600"
+              className="py-6 bg-primary text-primary-foreground hover:bg-primary/90"
               disabled={isPending || !searchInputValue.trim()}
             >
               {isPending ? (
@@ -310,7 +310,7 @@ export default function TVShowsPage() {
         </div>
       </div>
 
-      <div className="bg-purple-50 rounded-xl shadow-sm border border-purple-100 p-6">
+      <div className="bg-card rounded-xl shadow-sm border border-border p-6">
         {searchQuery ? (
           <div>
             <div className="flex items-center justify-between mb-6">
@@ -319,7 +319,10 @@ export default function TVShowsPage() {
                   Search Results for "{searchQuery}"
                 </h2>
                 {currentData.totalResults > 0 && (
-                  <Badge variant="secondary" className="ml-3">
+                  <Badge
+                    variant="secondary"
+                    className="ml-3 bg-secondary text-secondary-foreground"
+                  >
                     {currentData.totalResults} results
                   </Badge>
                 )}
@@ -355,13 +358,16 @@ export default function TVShowsPage() {
                       {category.replace("_", " ")} TV Shows
                     </h2>
                     {currentData.totalResults > 0 && (
-                      <Badge variant="secondary" className="ml-3">
+                      <Badge
+                        variant="secondary"
+                        className="ml-3 bg-secondary text-secondary-foreground"
+                      >
                         {currentData.totalResults} shows
                       </Badge>
                     )}
                   </div>
                   <div className="flex items-center gap-4">
-                    <TabsList className="grid grid-cols-3 w-auto">
+                    <TabsList className="grid grid-cols-3 w-auto bg-muted">
                       <TabsTrigger value="popular" className="px-4">
                         <TrendingUp className="h-4 w-4 mr-2 md:mr-1" />
                         <span className="hidden md:inline">Popular</span>
@@ -380,7 +386,7 @@ export default function TVShowsPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="border-purple-200 text-purple-700 hover:bg-purple-100"
+                          className="border-border text-foreground hover:bg-accent hover:text-accent-foreground"
                         >
                           <Filter className="h-4 w-4 mr-2" />
                           Filters
@@ -574,11 +580,9 @@ function TVShowGrid({ tvShows }: { tvShows: TVShow[] }) {
   if (tvShows.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center">
-        <Tv className="h-16 w-16 text-purple-400 mb-4" />
-        <h3 className="text-xl font-semibold mb-2 text-purple-700">
-          No TV shows found
-        </h3>
-        <p className="text-purple-600 max-w-md">
+        <Tv className="h-16 w-16 text-muted-foreground mb-4" />
+        <h3 className="text-xl font-semibold mb-2">No TV shows found</h3>
+        <p className="text-muted-foreground max-w-md">
           Try adjusting your search or browse through different categories
         </p>
       </div>
@@ -596,7 +600,7 @@ function TVShowGrid({ tvShows }: { tvShows: TVShow[] }) {
           transition={{ duration: 0.3 }}
         >
           <Link href={`/tv/${show.id}`} className="block">
-            <div className="relative aspect-[2/3] overflow-hidden rounded-lg bg-purple-100 shadow-md transition-all duration-300 group-hover:shadow-xl">
+            <div className="relative aspect-[2/3] overflow-hidden rounded-lg bg-muted shadow-md transition-all duration-300 group-hover:shadow-xl">
               {show.poster_path ? (
                 <Image
                   src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
@@ -629,7 +633,7 @@ function TVShowGrid({ tvShows }: { tvShows: TVShow[] }) {
                   <TooltipTrigger asChild>
                     <Badge
                       variant="secondary"
-                      className="bg-purple-700/70 text-white backdrop-blur-sm flex items-center gap-1"
+                      className="bg-secondary/70 text-secondary-foreground backdrop-blur-sm flex items-center gap-1"
                     >
                       <Star className="h-3 w-3 text-yellow-400 fill-yellow-400" />
                       {show.vote_average.toFixed(1)}
@@ -664,7 +668,7 @@ function TVShowGrid({ tvShows }: { tvShows: TVShow[] }) {
               <Badge
                 key={genreId}
                 variant="outline"
-                className="text-xs border-purple-300 text-purple-700"
+                className="text-xs border-border text-foreground"
               >
                 {genreMap[genreId] || "Unknown"}
               </Badge>
@@ -672,7 +676,7 @@ function TVShowGrid({ tvShows }: { tvShows: TVShow[] }) {
             {show.origin_country[0] && (
               <Badge
                 variant="outline"
-                className="text-xs border-purple-300 text-purple-700"
+                className="text-xs border-border text-foreground"
               >
                 {show.origin_country[0]}
               </Badge>

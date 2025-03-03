@@ -1,6 +1,6 @@
 export function TVShowSkeleton() {
   return (
-    <div className="border rounded-lg overflow-hidden shadow-md bg-card animate-pulse">
+    <div className="border border-border rounded-lg overflow-hidden shadow-md bg-card animate-pulse">
       <div className="w-full h-80 bg-muted" />
       <div className="p-4 space-y-3">
         <div className="h-5 bg-muted rounded-md w-3/4" />

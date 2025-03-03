@@ -5,8 +5,8 @@ import { MovieDetails } from "@/components/movie-details";
 import { MovieCast } from "@/components/movie-cast";
 import { MovieReviews } from "@/components/movie-reviews";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import MoviePlayer from "@/app/movie/[id]/MoviePlayer";
+import { WatchNowButton } from "./WatchNowButton";
 
 async function getMovieDetails(id: string) {
   const accessToken = process.env.TMDB_ACCESS_TOKEN;
@@ -69,16 +69,16 @@ export default async function MoviePage({
           </div>
           <p className="text-lg mb-4">{movie.overview}</p>
           <div className="flex gap-4 mb-8">
-            <Link href={`/movie/${movie.id}/watch`}>
-              <Button>Watch Now</Button>
-            </Link>
+            <WatchNowButton />
             <Button variant="outline">Add to Watchlist</Button>
           </div>
           <MovieDetails movie={movie} />
         </div>
       </div>
       <MovieCast cast={movie.credits.cast} />
-      <MoviePlayer movie={movie} />
+      <div id="movie-player">
+        <MoviePlayer movie={movie} />
+      </div>
       <MovieReviews reviews={movie.reviews.results} />
     </div>
   );
