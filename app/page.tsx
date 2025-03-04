@@ -68,19 +68,19 @@ async function getTunisianRamadanShows() {
   }
 
   const currentYear = new Date().getFullYear();
-  const startDate = `${currentYear - 1}-01-01`; // Include last year's shows
-  const endDate = `${currentYear + 1}-12-31`; // Include next year's shows
+  const startDate = `${currentYear - 1}-01-01`;
+  const endDate = `${currentYear + 1}-12-31`;
 
   try {
     const res = await fetch(
       `https://api.themoviedb.org/3/discover/tv?` +
         new URLSearchParams({
           api_key: accessToken,
-          with_original_language: "ar", // Arabic language
+          with_original_language: "ar",
           "first_air_date.gte": startDate,
           "first_air_date.lte": endDate,
-          with_origin_country: "TN", // Specifically filter for Tunisian shows
-          sort_by: "popularity.desc", // Sort by popularity
+          with_origin_country: "TN",
+          sort_by: "popularity.desc",
           page: "1",
         }),
       {

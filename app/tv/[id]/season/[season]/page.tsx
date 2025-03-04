@@ -14,6 +14,15 @@ export default async function SeasonPage({
     params.season
   );
 
+  const getWatchUrl = (episodeNumber: number): string => {
+    const episodeUrls: Record<number, string> = {
+      1: "https://vkvideo.ru/video890230561_456256271",
+      2: "https://vkvideo.ru/video-225093482_456239045",
+      3: "https://vkvideo.ru/video890230561_456257085",
+    };
+    return episodeUrls[episodeNumber] || "#";
+  };
+
   return (
     <div className="min-h-screen bg-black text-white">
       <div className="relative h-[40vh]">
@@ -87,6 +96,40 @@ export default async function SeasonPage({
         </div>
       </div>
 
+      {params.id === "285435" && (
+        <div className="mt-12 text-center">
+          <h2 className="text-2xl font-bold text-white mb-4">
+            Watch Episodes Now
+          </h2>
+          <div className="flex justify-center gap-4">
+            <a
+              href={getWatchUrl(1)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-purple-600 hover:bg-purple-500 text-white py-3 px-6 rounded-lg transition-all duration-300"
+            >
+              Watch Episode 1
+            </a>
+            <a
+              href={getWatchUrl(2)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-purple-600 hover:bg-purple-500 text-white py-3 px-6 rounded-lg transition-all duration-300"
+            >
+              Watch Episode 2
+            </a>
+            <a
+              href={getWatchUrl(3)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-purple-600 hover:bg-purple-500 text-white py-3 px-6 rounded-lg transition-all duration-300"
+            >
+              Watch Episode 3
+            </a>
+          </div>
+        </div>
+      )}
+
       <div className="relative bg-gradient-to-b from-black to-gray-900 py-12">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -151,12 +194,6 @@ export default async function SeasonPage({
                         {episode.overview}
                       </p>
                     )}
-
-                    <div className="mt-4 p-px bg-gradient-to-r from-purple-600 to-blue-500 rounded-lg">
-                      <div className="bg-gray-900 text-center py-2 px-4 rounded-[7px] text-white font-medium group-hover:bg-transparent transition-colors duration-300">
-                        🎬 Watch Now
-                      </div>
-                    </div>
                   </div>
                 </div>
               </Link>

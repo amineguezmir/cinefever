@@ -21,14 +21,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <Script
-          strategy="beforeInteractive"
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9566474790063649"
-          async
-          crossOrigin="anonymous"
-        />
-      </head>
       <body
         className={`${inter.className} bg-gradient-to-br from-gray-900 to-black text-white`}
       >

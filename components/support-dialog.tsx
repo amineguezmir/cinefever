@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import emailjs from "emailjs-com";
 import {
   Dialog,
   DialogContent,
@@ -19,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 
 interface SupportDialogProps {
   open: boolean;
@@ -39,17 +40,37 @@ export function SupportDialog({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [issueType, setIssueType] = useState("");
   const [email, setEmail] = useState("");
+  const [description, setDescription] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    setIsSubmitted(true);
-    setTimeout(() => {
-      setIsSubmitted(false);
-      onOpenChange(false);
-      setEmail("");
-      setIssueType("");
-    }, 2000);
+    const message = {
+      issueType,
+      description,
+      userEmail: user ? user.email : email,
+      userName: user ? user.name : "Anonymous",
+    };
+
+    console.log("Sending message:", message);
+
+    emailjs
+      .send("service_0kowirb", "template_0yp41sr", message, "qQuwpYi7kpWbZRcry")
+      .then(
+        () => {
+          setIsSubmitted(true);
+          setTimeout(() => {
+            setIsSubmitted(false);
+            onOpenChange(false);
+            setEmail("");
+            setIssueType("");
+            setDescription("");
+          }, 2000);
+        },
+        (error) => {
+          console.error("Failed to send email:", error);
+        }
+      );
   };
 
   return (
@@ -92,6 +113,8 @@ export function SupportDialog({
               </Label>
               <Textarea
                 id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 placeholder="Please describe your issue in detail..."
                 className="bg-zinc-800 border-zinc-700 text-white min-h-[100px]"
                 required
@@ -132,7 +155,7 @@ export function SupportDialog({
             </p>
             <p className="text-zinc-400 text-sm text-center">
               We'll review your submission and get back to you{" "}
-              {user ? `at ${user.email}` : `at ${email}`}.
+              {user ? `at ${user.email}` : `at ${email}`} .
             </p>
           </div>
         )}
