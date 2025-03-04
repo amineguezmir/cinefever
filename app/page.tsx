@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MovieCard } from "@/components/movie-card";
+import { TVShowCard } from "@/components/card-tvshow";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -12,7 +13,7 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import { Star, Calendar, Clock } from "lucide-react";
-import TvShows from "./tv/page";
+import { TunisianTVShowsSection } from "@/components/tunisian-tv-shows-section";
 
 async function getMovies(endpoint: string) {
   const accessToken = process.env.TMDB_ACCESS_TOKEN;
@@ -35,6 +36,80 @@ async function getMovies(endpoint: string) {
 
   const data = await res.json();
   return data.results || [];
+}
+
+async function getTVShows(endpoint: string) {
+  const accessToken = process.env.TMDB_ACCESS_TOKEN;
+  if (!accessToken) {
+    throw new Error("TMDB_ACCESS_TOKEN is not set in environment variables");
+  }
+
+  const res = await fetch(`https://api.themoviedb.org/3${endpoint}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      accept: "application/json",
+    },
+    next: { revalidate: 3600 },
+  });
+
+  if (!res.ok) {
+    console.error(`HTTP error! status: ${res.status}`);
+    return [];
+  }
+
+  const data = await res.json();
+  return data.results || [];
+}
+
+async function getTunisianRamadanShows() {
+  const accessToken = process.env.TMDB_ACCESS_TOKEN;
+  if (!accessToken) {
+    throw new Error("TMDB_ACCESS_TOKEN is not set in environment variables");
+  }
+
+  const currentYear = new Date().getFullYear();
+  const startDate = `${currentYear - 1}-01-01`; // Include last year's shows
+  const endDate = `${currentYear + 1}-12-31`; // Include next year's shows
+
+  try {
+    const res = await fetch(
+      `https://api.themoviedb.org/3/discover/tv?` +
+        new URLSearchParams({
+          api_key: accessToken,
+          with_original_language: "ar", // Arabic language
+          "first_air_date.gte": startDate,
+          "first_air_date.lte": endDate,
+          with_origin_country: "TN", // Specifically filter for Tunisian shows
+          sort_by: "popularity.desc", // Sort by popularity
+          page: "1",
+        }),
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          accept: "application/json",
+        },
+        next: { revalidate: 3600 },
+      }
+    );
+
+    if (!res.ok) {
+      console.error(`HTTP error! status: ${res.status}`);
+      const errorText = await res.text();
+      console.error(`Error response: ${errorText}`);
+      return [];
+    }
+
+    const data = await res.json();
+    console.log(
+      "Tunisian TV Shows API response:",
+      JSON.stringify(data, null, 2)
+    );
+
+    return data.results || [];
+  } catch (error) {
+    console.error("Error fetching Tunisian TV shows:", error);
+    return [];
+  }
 }
 
 function FeaturedMovie({ movie }: { movie: any }) {
@@ -124,11 +199,63 @@ function MovieSection({
   );
 }
 
+function TVShowSection({
+  title,
+  tvShows,
+  category,
+}: {
+  title: string;
+  tvShows: any[];
+  category: string;
+}) {
+  return (
+    <section className="mb-12">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-3xl font-bold tracking-tight">{title}</h2>
+        <Button variant="link" className="text-blue-500 text-lg" asChild>
+          <Link href={`/tv?category=${category}`}>See All</Link>
+        </Button>
+      </div>
+      <div className="relative">
+        <Carousel className="w-full">
+          <CarouselContent className="flex">
+            {tvShows.slice(0, 10).map((tvShow: any) => (
+              <CarouselItem
+                key={tvShow.id}
+                className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5"
+              >
+                <TVShowCard
+                  id={tvShow.id}
+                  title={tvShow.name}
+                  posterPath={tvShow.poster_path}
+                  rating={tvShow.vote_average}
+                  year={new Date(tvShow.first_air_date).getFullYear()}
+                  overview={tvShow.overview}
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white" />
+          <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white" />
+        </Carousel>
+      </div>
+    </section>
+  );
+}
+
 export default async function Home() {
-  const [trendingMovies, topRatedMovies, upcomingMovies] = await Promise.all([
+  const [
+    tunisianShows,
+    trendingMovies,
+    topRatedMovies,
+    upcomingMovies,
+    topRatedTVShows,
+  ] = await Promise.all([
+    getTunisianRamadanShows(),
     getMovies("/trending/movie/day"),
     getMovies("/movie/top_rated?language=en-US&page=1"),
     getMovies("/movie/upcoming?language=en-US&page=1"),
+    getTVShows("/tv/top_rated?language=en-US&page=1"),
   ]);
 
   return (
@@ -147,6 +274,14 @@ export default async function Home() {
         <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white" />
       </Carousel>
 
+      <TunisianTVShowsSection
+        title="Ramadan TV Specials"
+        tvShows={tunisianShows}
+        category="tunisian-shows"
+      />
+
+      <Separator />
+
       <MovieSection
         title="Trending Now"
         movies={trendingMovies}
@@ -163,6 +298,12 @@ export default async function Home() {
         title="Coming Soon"
         movies={upcomingMovies}
         category="upcoming"
+      />
+      <Separator />
+      <TVShowSection
+        title="Top Rated TV Shows"
+        tvShows={topRatedTVShows}
+        category="top-rated"
       />
     </div>
   );

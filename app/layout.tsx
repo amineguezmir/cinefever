@@ -23,14 +23,10 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <Script
-          id="ad-script"
           strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `/*<![CDATA[/* */
-            (function(){var z=window,j="e441f630f18f23143211514fa18360c2",x=[["siteId",882*234*120+143-19586511],["minBid",0.0005],["popundersPerIP","5:1,2:1"],["delayBetween",15],["default",false],["defaultPerDay",20],["topmostLayer","always"]],k=["d3d3LnhhZHNtYXJ0LmNvbS9GeGR1eHgvZXBWWmcvY2VtYmVkLm1pbi5qcw==","ZDExZW5xMnJ5bXkweWwuY2xvdWRmcm9udC5uZXQvZ3hpdmVseWpzLm1pbi5qcw=="],b=-1,w,t,v=function(){clearTimeout(t);b++;if(k[b]&&!(1766965581000<(new Date).getTime()&&1<b)){w=z.document.createElement("script");w.type="text/javascript";w.async=!0;var o=z.document.getElementsByTagName("script")[0];w.src="https://"+atob(k[b]);w.crossOrigin="anonymous";w.onerror=v;w.onload=function(){clearTimeout(t);z[j.slice(0,16)+j.slice(0,16)]||v()};t=setTimeout(v,5E3);o.parentNode.insertBefore(w,o)}};if(!z[j]){try{Object.freeze(z[j]=x)}catch(e){}v()}})();
-            /*]]>/* */
-            `,
-          }}
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9566474790063649"
+          async
+          crossOrigin="anonymous"
         />
       </head>
       <body
