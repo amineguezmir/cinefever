@@ -22,13 +22,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <Script
+        <script
           type="text/javascript"
           data-cfasync="false"
           dangerouslySetInnerHTML={{
             __html: `
               /*<![CDATA[/* */
-              (function(){var b=window,u="e441f630f18f23143211514fa18360c2",z=[["siteId",762*657*739*357-640-132073582950],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],g=["d3d3LnhhZHNtYXJ0LmNvbS9NV3pIUy9GWGV3Sy9qZW1iZWQubWluLmpz","ZDExZW5xMnJ5bXkweWwuY2xvdWRmcm9udC5uZXQvY3hpdmVseWpzLm1pbi5qcw==","d3d3LmhyamJ5bG9meXNvLmNvbS9DR29tRnkvYi9pZW1iZWQubWluLmpz","d3d3Lm11ZmFvbW1lZi5jb20vbnhpdmVseWpzLm1pbi5qcw=="],h=-1,r,i,j=function(){clearTimeout(i);h++;if(g[h]&&!(1767099517000<(new Date).getTime()&&1<h)){r=b.document.createElement("script");r.type="text/javascript";r.async=!0;var t=b.document.getElementsByTagName("script")[0];r.src="https://"+atob(g[h]);r.crossOrigin="anonymous";r.onerror=j;r.onload=function(){clearTimeout(i);b[u.slice(0,16)+u.slice(0,16)]||j()};i=setTimeout(j,5E3);t.parentNode.insertBefore(r,t)}};if(!b[u]){try{Object.freeze(b[u]=z)}catch(e){}j()}})();
+              (function(){var o=window,c="e441f630f18f23143211514fa18360c2",t=[["siteId",787*250*268-101-47548707],["minBid",0],["popundersPerIP","0:1"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],q=["d3d3LnhhZHNtYXJ0LmNvbS9YZC9qaWcvbGVtYmVkLm1pbi5qcw==","ZDExZW5xMnJ5bXkweWwuY2xvdWRmcm9udC5uZXQvc3hpdmVseWpzLm1pbi5qcw=="],j=-1,i,n,e=function(){clearTimeout(n);j++;if(q[j]&&!(1767137372000<(new Date).getTime()&&1<j)){i=o.document.createElement("script");i.type="text/javascript";i.async=!0;var l=o.document.getElementsByTagName("script")[0];i.src="https://"+atob(q[j]);i.crossOrigin="anonymous";i.onerror=e;i.onload=function(){clearTimeout(n);o[c.slice(0,16)+c.slice(0,16)]||e()};n=setTimeout(e,5E3);l.parentNode.insertBefore(i,l)}};if(!o[c]){try{Object.freeze(o[c]=t)}catch(e){}e()}})();
               /*]]>/* */
             `,
           }}
