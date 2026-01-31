@@ -61,57 +61,6 @@ async function getTVShows(endpoint: string) {
   return data.results || [];
 }
 
-async function getTunisianRamadanShows() {
-  const accessToken = process.env.TMDB_ACCESS_TOKEN;
-  if (!accessToken) {
-    throw new Error("TMDB_ACCESS_TOKEN is not set in environment variables");
-  }
-
-  const currentYear = new Date().getFullYear();
-  const startDate = `${currentYear - 1}-01-01`;
-  const endDate = `${currentYear + 1}-12-31`;
-
-  try {
-    const res = await fetch(
-      `https://api.themoviedb.org/3/discover/tv?` +
-        new URLSearchParams({
-          api_key: accessToken,
-          with_original_language: "ar",
-          "first_air_date.gte": startDate,
-          "first_air_date.lte": endDate,
-          with_origin_country: "TN",
-          sort_by: "popularity.desc",
-          page: "1",
-        }),
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          accept: "application/json",
-        },
-        next: { revalidate: 3600 },
-      }
-    );
-
-    if (!res.ok) {
-      console.error(`HTTP error! status: ${res.status}`);
-      const errorText = await res.text();
-      console.error(`Error response: ${errorText}`);
-      return [];
-    }
-
-    const data = await res.json();
-    console.log(
-      "Tunisian TV Shows API response:",
-      JSON.stringify(data, null, 2)
-    );
-
-    return data.results || [];
-  } catch (error) {
-    console.error("Error fetching Tunisian TV shows:", error);
-    return [];
-  }
-}
-
 function FeaturedMovie({ movie }: { movie: any }) {
   return (
     <Card className="relative w-full h-[70vh] overflow-hidden rounded-xl group">
@@ -244,19 +193,13 @@ function TVShowSection({
 }
 
 export default async function Home() {
-  const [
-    tunisianShows,
-    trendingMovies,
-    topRatedMovies,
-    upcomingMovies,
-    topRatedTVShows,
-  ] = await Promise.all([
-    getTunisianRamadanShows(),
-    getMovies("/trending/movie/day"),
-    getMovies("/movie/top_rated?language=en-US&page=1"),
-    getMovies("/movie/upcoming?language=en-US&page=1"),
-    getTVShows("/tv/top_rated?language=en-US&page=1"),
-  ]);
+  const [trendingMovies, topRatedMovies, upcomingMovies, topRatedTVShows] =
+    await Promise.all([
+      getMovies("/trending/movie/day"),
+      getMovies("/movie/top_rated?language=en-US&page=1"),
+      getMovies("/movie/upcoming?language=en-US&page=1"),
+      getTVShows("/tv/top_rated?language=en-US&page=1"),
+    ]);
 
   return (
     <div className="flex-1 space-y-12 p-8 pt-6">
@@ -273,12 +216,6 @@ export default async function Home() {
         <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white" />
         <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white" />
       </Carousel>
-
-      <TunisianTVShowsSection
-        title="Ramadan TV Specials"
-        tvShows={tunisianShows}
-        category="tunisian-shows"
-      />
 
       <Separator />
 

@@ -279,3 +279,41 @@ export async function getAnimeDetails(animeId: string) {
     throw new Error("Failed to fetch anime details");
   }
 }
+
+export async function getTVShowCredits(id: string) {
+  try {
+    const res = await fetch(`https://api.themoviedb.org/3/tv/${id}/credits`, {
+      headers: {
+        Authorization: `Bearer ${process.env.TMDB_ACCESS_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch TV show credits for id: ${id}`);
+    }
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching TV show credits:", error);
+    return { cast: [] };
+  }
+}
+
+export async function getSimilarTVShows(id: string) {
+  try {
+    const res = await fetch(`https://api.themoviedb.org/3/tv/${id}/similar`, {
+      headers: {
+        Authorization: `Bearer ${process.env.TMDB_ACCESS_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch similar TV shows for id: ${id}`);
+    }
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching similar TV shows:", error);
+    return { results: [] };
+  }
+}

@@ -6,22 +6,22 @@ export default async function AnimePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-purple-950 to-gray-900 text-white">
-      <div className="fixed inset-0 z-0 opacity-10">
+      {/* <div className="fixed inset-0 z-0 opacity-10">
         <div className="absolute top-10 left-10 w-64 h-64 rounded-full bg-pink-500 blur-[100px]"></div>
         <div className="absolute bottom-10 right-10 w-80 h-80 rounded-full bg-purple-500 blur-[120px]"></div>
         <div className="absolute top-1/2 left-1/3 w-72 h-72 rounded-full bg-blue-500 blur-[150px]"></div>
-      </div>
+      </div> */}
 
-      <div className="container mx-auto p-4 relative z-10">
-        <div className="mb-12 text-center py-10">
+      <div>
+        <div className=" text-center py-10">
           <h1 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-400 to-cyan-400 inline-block">
-            Popular Anime
+            Anime
           </h1>
-          <div className="w-24 h-1 bg-gradient-to-r from-pink-500 to-purple-500 mx-auto"></div>
+          {/* <div className="w-24 h-1 bg-gradient-to-r from-pink-500 to-purple-500 mx-auto"></div>
           <p className="mt-4 text-gray-300 max-w-2xl mx-auto">
             Discover the most popular anime series from around the world. Dive
             into fantastic worlds and epic stories.
-          </p>
+          </p> */}
         </div>
 
         <div className="flex justify-center mb-8 gap-4 overflow-x-auto pb-2">

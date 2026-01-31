@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useRouter, useSearchParams } from "next/navigation";
+import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 // import { toast } from "@/components/ui/use-toast"
 
 const genres = [
@@ -38,15 +39,18 @@ export default function DiscoverPage() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(100); // Default to a high number to ensure pagination works
 
   useEffect(() => {
     const query = searchParams.get("query") || "";
     const genre = searchParams.get("genre") || "";
     const year = searchParams.get("year") || "";
+    const currentPage = Number.parseInt(searchParams.get("page") || "1", 10);
     setSearchQuery(query);
     setSelectedGenre(genre);
     setSelectedYear(year);
-    handleSearch(query, genre, year, 1);
+    setPage(currentPage);
+    handleSearch(query, genre, year, currentPage);
   }, [searchParams]);
 
   const handleSearch = async (
@@ -71,9 +75,36 @@ export default function DiscoverPage() {
       if (data.error) {
         throw new Error(data.error);
       }
-      setMovies(page === 1 ? data : [...movies, ...data]);
+
+      // Check if the API response has a results property (like TMDB API)
+      if (data.results) {
+        setMovies(data.results);
+        // If we have total_pages in the response, use it
+        if (data.total_pages) {
+          setTotalPages(data.total_pages);
+        }
+        // If we have total_results, calculate total pages
+        else if (data.total_results) {
+          setTotalPages(Math.ceil(data.total_results / 20));
+        }
+        // If we have a full page of results (typically 20), assume there are more pages
+        else if (data.results.length >= 20) {
+          setTotalPages(Math.max(100, totalPages)); // Set a high number to ensure pagination works
+        }
+      } else {
+        // If the API directly returns an array of movies
+        setMovies(data);
+        // If we have a full page of results (typically 20), assume there are more pages
+        if (data.length >= 20) {
+          setTotalPages(Math.max(100, totalPages)); // Set a high number to ensure pagination works
+        }
+      }
+
       setPage(page);
-      router.push(`/discover?${params.toString()}`);
+
+      // Use a different approach for navigation to ensure the page updates
+      const url = `/discover?${params.toString()}`;
+      router.push(url, { scroll: false });
     } catch (error) {
       console.error("Failed to search movies:", error);
       // toast({
@@ -85,9 +116,125 @@ export default function DiscoverPage() {
       setLoading(false);
     }
   };
+// this code i put here just for testing 
+// i'll delete later 
+const handlePage2Change = (newPage:Number)=> {
+  if (newPage < 1 || (newPage === page && !loading)) return 
+  const params = new URLSearchParams()
+  if (searchQuery) params.set("query", searchQuery)
+    if (selectedGenre) params.set("genre", selectedGenre)
+      if (selectedYear) paramas.set("year" , selectedYear)
+        params.set("page", newPage.toString())
 
-  const loadMore = () => {
-    handleSearch(searchQuery, selectedGenre, selectedYear, page + 1);
+
+}
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage < 1 || (newPage === page && !loading)) return;
+
+    // Create URL params
+    const params = new URLSearchParams();
+    if (searchQuery) params.set("query", searchQuery);
+    if (selectedGenre) params.set("genre", selectedGenre);
+    if (selectedYear) params.set("year", selectedYear);
+    params.set("page", newPage.toString());
+
+    // Navigate to the new URL which will trigger the useEffect
+    router.push(`/discover?${params.toString()}`);
+  };
+
+  // Generate pagination items with improved UI
+  const renderPaginationItems = () => {
+    const items = [];
+    const maxVisiblePages = 7; // Maximum number of page buttons to show
+
+    // Always show first page
+    items.push(
+      <Button
+        key="first"
+        variant={page === 1 ? "default" : "outline"}
+        size="sm"
+        onClick={() => handlePageChange(1)}
+        disabled={loading}
+        className="h-9 w-9 p-0"
+      >
+        1
+      </Button>
+    );
+
+    // Calculate range of pages to show
+    let startPage = Math.max(2, page - 2);
+    let endPage = Math.min(totalPages - 1, page + 2);
+
+    // Adjust range if we're near the beginning
+    if (page <= 4) {
+      startPage = 2;
+      endPage = Math.min(totalPages - 1, 6);
+    }
+
+    // Adjust range if we're near the end
+    if (page >= totalPages - 3) {
+      startPage = Math.max(2, totalPages - 5);
+      endPage = totalPages - 1;
+    }
+
+    // Add ellipsis after first page if needed
+    if (startPage > 2) {
+      items.push(
+        <span
+          key="ellipsis-start"
+          className="flex items-center justify-center h-9 w-9"
+        >
+          <MoreHorizontal className="h-4 w-4" />
+        </span>
+      );
+    }
+
+    // Add page numbers
+    for (let i = startPage; i <= endPage; i++) {
+      items.push(
+        <Button
+          key={i}
+          variant={page === i ? "default" : "outline"}
+          size="sm"
+          onClick={() => handlePageChange(i)}
+          disabled={loading}
+          className="h-9 w-9 p-0"
+        >
+          {i}
+        </Button>
+      );
+    }
+
+    // Add ellipsis before last page if needed
+    if (endPage < totalPages - 1) {
+      items.push(
+        <span
+          key="ellipsis-end"
+          className="flex items-center justify-center h-9 w-9"
+        >
+          <MoreHorizontal className="h-4 w-4" />
+        </span>
+      );
+    }
+
+    // Always show last page if there's more than one page
+    if (totalPages > 1) {
+      items.push(
+        <Button
+          key="last"
+          variant={page === totalPages ? "default" : "outline"}
+          size="sm"
+          onClick={() => handlePageChange(totalPages)}
+          disabled={loading}
+          className="h-9 w-9 p-0"
+        >
+          {totalPages}
+        </Button>
+      );
+    }
+
+    return items;
   };
 
   return (
@@ -148,9 +295,37 @@ export default function DiscoverPage() {
       </div>
       {movies.length > 0 && (
         <div className="mt-8 flex justify-center">
-          <Button onClick={loadMore} disabled={loading}>
-            {loading ? "Loading..." : "Load More"}
-          </Button>
+          <div className="flex items-center space-x-1 bg-background border rounded-lg p-1 shadow-sm">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => handlePageChange(page - 1)}
+              disabled={page === 1 || loading}
+              className="h-9 w-9 p-0"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+
+            <div className="hidden sm:flex space-x-1">
+              {renderPaginationItems()}
+            </div>
+
+            <div className="sm:hidden flex items-center space-x-1">
+              <span className="text-sm font-medium">
+                Page {page} of {totalPages}
+              </span>
+            </div>
+
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => handlePageChange(page + 1)}
+              disabled={page === totalPages || loading}
+              className="h-9 w-9 p-0"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       )}
     </div>
